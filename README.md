@@ -1,8 +1,8 @@
-Домашнее задание
-Compile kernel
-Создание vagrant box
+# ДЗ 1
+# Compile kernel
 
-Компиляция ядра из исходников
+## Компиляция ядра из исходников
+
 Команды для компиляции ядра указаны в скрипте packer/scripts/stage-1-kernel-compile-and-update.sh
 
 Устанавливаются необходимые зависимости
@@ -11,9 +11,12 @@ yum install -y wget gcc flex bison ncurses-devel openssl-devel bc elfutils-libel
 
 Используются исходники из архива https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.93.tar.xz
 
-Проблема с синхронизированием каталогов между хостом и гостевой машиной
+
+## Проблема с синхронизированием каталогов между хостом и гостевой машиной
+
 После сборки, при старте виртуальной машины возникает проблема:
 
+<pre>
 ==> default: Mounting shared folders...
     default: /vagrant => /root/linux-otus/manual_kernel_update/test
 Vagrant was unable to mount VirtualBox shared folders. This is usually
@@ -28,17 +31,23 @@ mount -t vboxsf -o uid=1000,gid=1000 vagrant /vagrant
 The error output from the command was:
 
 mount: unknown filesystem type 'vboxsf'
-Исправление проблемы с синхронизацией каталогов
+</pre>
+
+## Исправление проблемы с синхронизацией каталогов
+
 Для исправления проблемы в provision packer-а добавлен дополнительный скрипт: stage-1a-virtualbox.sh
 
 Выполняются следующие операции:
 
-Скачивается расширение VBoxGuestAdditions
-Монтируется и запускается скрипт установки: /mnt/VBoxLinuxAdditions.run
+*  Скачивается расширение VBoxGuestAdditions
+*  Монтируется и запускается скрипт установки: /mnt/VBoxLinuxAdditions.run
 
-Ошибка возникает из-за попытки запустить GUI-а, а его не предполагается. Для исправления необходимо указать packer-у, что сборка будет идти в консольном режиме:
+## Ошибка при запуске GUI
 
+Ошибка возникает из-за попытки запустить GUI-а, а его не предполагается.
+Для исправления необходимо указать packer-у, что сборка будет идти в консольном режиме:
 
+<pre><code>
 {
  "variables": {
    "artifact_description": "CentOS 7.7 with kernel 5.x",
@@ -53,3 +62,6 @@ mount: unknown filesystem type 'vboxsf'
      "type": "virtualbox-iso",
      "vm_name": "packer-centos-vm",
      "headless": "{{user headless}}",
+</code></pre>
+
+
