@@ -1,13 +1,9 @@
 # ДЗ 1
-# Compile kernel
 
 ## Компиляция ядра из исходников
 
 Команды для компиляции ядра указаны в скрипте packer/scripts/stage-1-kernel-compile-and-update.sh
 
-Устанавливаются необходимые зависимости
-
-yum install -y wget gcc flex bison ncurses-devel openssl-devel bc elfutils-libelf-devel perl
 
 Используются исходники из архива https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.93.tar.xz
 
